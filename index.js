@@ -17,7 +17,7 @@ import {
 } from '@whiskeysockets/baileys'
 
 import { smsg } from './lib/message.js'
-import main from './main.js'
+import './handler.js'
 
 /* ───────────── LOG ───────────── */
 const log = {
