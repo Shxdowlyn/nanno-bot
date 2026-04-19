@@ -100,20 +100,20 @@ const handler = async (m, { conn, args, usedPrefix }) => {
       : content;
 
     const replacements = {
-      $owner: owner || 'Oculto por privacidad',
-      $botType,
-      $device: device,
-      $tiempo: tiempo,
-      $tempo: tempo,
-      $users: users.toLocaleString(),
-      $link: link,
-      $cat: category,
-      $sender: sender,
-      $botname: botname,
-      $namebot: namebot,
-      $prefix: usedPrefix,
-      $uptime: time
-    };
+  $owner: owner || 'Oculto por privacidad',
+  $botType: botType,
+  $device: device,
+  $tiempo: tiempo,
+  $tempo: tempo,
+  $users: users.toLocaleString(),
+  $link: link,
+  $cat: category,
+  $sender: sender,
+  $botname: botname,
+  $namebot: namebot,
+  $prefix: usedPrefix,
+  $uptime: time
+};
 
     for (const [key, value] of Object.entries(replacements)) {
       menu = menu.replace(new RegExp(`\\${key}`, 'g'), value);
