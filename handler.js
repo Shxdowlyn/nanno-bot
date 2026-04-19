@@ -1,5 +1,5 @@
 import './settings.js';
-import { smsg } from './lib/simple.js';
+import { smsg } from './lib/smsg.js';
 import { database } from './lib/database.js';
 import { readdirSync } from 'fs';
 import { join, resolve } from 'path';
