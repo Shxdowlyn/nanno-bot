@@ -20,7 +20,8 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     const now = new Date();
     const colombianTime = new Date(
-      now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires ' })
+  now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })
+);
     );
 
     const tiempo = colombianTime.toLocaleDateString('en-GB', {
