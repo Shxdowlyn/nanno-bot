@@ -37,10 +37,18 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net'
 
-    const botSettings = global.db.data.settings?.[botId] || {}
+// 🔒 seguridad total DB
+global.db ||= {}
+global.db.data ||= {}
+global.db.data.settings ||= {}
 
-    // 🔥 CANAL WHATSAPP (FIX)
-    global.db.data.settings[botId].id ??= '120363406529946290@newsletter'
+// 🔥 asegurar bot settings
+global.db.data.settings[botId] ||= {}
+
+// 📡 canal default
+global.db.data.settings[botId].id ??= '120363406529946290@newsletter'
+
+const botSettings = global.db.data.settings[botId]'
 
     const banner =
       botSettings.banner ||
