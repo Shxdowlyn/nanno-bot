@@ -358,69 +358,41 @@ Te sugiero amablemente usar #menu… a menos que disfrutes equivocarte, claro.
                 plugins
             })
 
-        } catch (cmdError) {
+      } catch (cmdError) {
 
-            console.log(chalk.red('[ERROR COMANDO DETECTADO]'))
-            console.log(cmdError)
+    console.log(chalk.red('[ERROR COMANDO]'), cmdError)
 
-            let errorType = 'Desconocido'
-            let errorMsg = cmdError?.message || String(cmdError)
+    const errorMsg = cmdError?.message || String(cmdError)
 
-            try {
+    let errorType = 'Desconocido'
 
-                if (cmdError.response) {
-                    errorType = 'API / HTTP'
-                    errorMsg = `Status: ${cmdError.response.status}\nData: ${JSON.stringify(cmdError.response.data).slice(0,300)}`
-                }
+    if (cmdError?.response) {
+        errorType = 'API / HTTP'
+    } else if (/html|doctype/i.test(errorMsg)) {
+        errorType = 'Respuesta HTML inesperada'
+    } else if (/unexpected token|json/i.test(errorMsg)) {
+        errorType = 'Error JSON'
+    } else if (/cannot find module|err_module_not_found/i.test(errorMsg)) {
+        errorType = 'Módulo faltante'
+    } else if (/econnrefused|enotfound/i.test(errorMsg)) {
+        errorType = 'Conexión fallida'
+    } else if (/timeout/i.test(errorMsg)) {
+        errorType = 'Timeout'
+    }
 
-                else if (errorMsg.includes('<html') || errorMsg.includes('<!DOCTYPE html')) {
-                    errorType = 'Respuesta HTML inesperada (posible API caída)'
-                }
+    const debug = `
+❌ *ERROR AL EJECUTAR COMANDO*
 
-                else if (errorMsg.includes('Unexpected token') || errorMsg.includes('JSON')) {
-                    errorType = 'Error de JSON'
-                }
+📍 Tipo: ${errorType}
 
-                else if (errorMsg.includes('Cannot find module') || errorMsg.includes('ERR_MODULE_NOT_FOUND')) {
-                    errorType = 'Error de Import / Módulo faltante'
-                }
+🧾 Mensaje:
+${errorMsg.slice(0, 500)}
 
-                else if (errorMsg.includes('ECONNREFUSED') || errorMsg.includes('ENOTFOUND')) {
-                    errorType = 'Error de conexión / API caída'
-                }
-
-                else if (errorMsg.includes('timeout')) {
-                    errorType = 'Timeout / API muy lenta'
-                }
-
-            } catch {}
-
-            let debug = `
-◜࣭࣭࣭࣭࣭᷼❌̸̷ׁᮬᰰᩫ࣭࣭࣭࣭  *ERROR AL EJECUTAR COMANDO*
-
-◜࣭࣭࣭࣭࣭᷼📍̸̷ׁᮬᰰᩫ࣭࣭࣭࣭ Tipo: ${errorType}
-
-◜࣭࣭࣭࣭࣭᷼📝̸̷ׁᮬᰰᩫ࣭࣭࣭࣭ Mensaje:
-${errorMsg.slice(0,500)}
-
-> ⚙️ Comando:
-${m.text}
+⚙️ Comando:
+${m.text || 'desconocido'}
 `.trim()
 
-            console.log(chalk.red(debug))
+    console.log(chalk.red(debug))
 
-            if (m?.reply) m.reply(debug)
-        }
-
-    } catch (e) {
-
-        console.log(chalk.red('[ERROR HANDLER GLOBAL]'), e)
-
-        let msg = e?.message || String(e)
-
-        if (m?.reply) {
-            m.reply(`❌ *ERROR GLOBAL*\n\n🧾 ${msg.slice(0,400)}`)
-        }
-
-    }
+    if (m?.reply) await m.reply(debug)
 }
