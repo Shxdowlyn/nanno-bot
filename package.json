@@ -1,61 +1,82 @@
 {
-  "name": "nannobot",
-  "version": "2.0.0",
-  "description": "Nanno WhatsApp Bot (Baileys ESM)",
+  "name": "Nannobot",
+  "version": "1.0.0",
+  "description": "WhatsApp Bot",
   "main": "index.js",
   "type": "module",
-
+  "directories": {
+    "lib": "lib",
+    "src": "src",
+    "plugins": "plugins"
+  },
   "scripts": {
     "start": "node index.js",
-    "qr": "node index.js --qr",
-    "code": "node index.js --code",
-    "dev": "nodemon index.js"
+    "qr": "node index.js qr",
+    "code": "node index.js code",
+    "test": "node test.js",
+    "test2": "nodemon index.js"
   },
-
+  "homepage": "https://github.com/jadeadaralove1/Demitrabot",
   "author": "Adara",
-  "license": "MIT",
-
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jadeadaralove1/Demitrabot"
   },
-
+  "license": "MIT",
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.7.9",
-    "lowdb": "^3.0.0",
-    "nanoid": "^3.3.7", 
-
-    "axios": "^1.6.0",
-    "chalk": "^4.1.2", 
-    "cheerio": "1.0.0-rc.12",
-    "express": "^4.19.2",
-    "form-data": "^4.0.0",
+    "@bochilteam/scraper": "^4.2.4",
+    "@distube/ytdl-core": "^4.16.12",
+    "@vitalets/google-translate-api": "^8.0.0",
+    "@whiskeysockets/baileys": "github:Kone457/bails",
+    "acrcloud": "^1.4.0",
+    "api-dylux": "^1.7.2",
+    "aptoide-scraper": "github:DIEGO-OFC/dv-aptoide-scraper",
+    "awesome-phonenumber": "^3.4.0",
+    "axios": "^1.1.2",
+    "boxen": "^7.1.1",
+    "cfonts": "^3.3.0",
+    "chalk": "^5.1.0",
+    "cheerio": "npm:cheerio@1.0.0-rc.12",
+    "didyoumean": "^1.2.2",
+    "file-type": "^18.0.0",
     "fluent-ffmpeg": "^2.1.2",
-
-    "gradient-string": "^2.0.2",
-    "jimp": "^1.6.1", 
-    "jsdom": "^24.0.0",
-
+    "form-data": "^4.0.0",
+    "formdata-node": "^5.0.0",
+    "google-libphonenumber": "3.2.38",
+    "hispamemes": "^1.0.7",
+    "human-readable": "^0.2.1",
+    "jimp": "^0.16.1",
+    "jsdom": "^20.0.1",
     "lodash": "^4.17.21",
-    "moment": "^2.30.1",
-    "moment-timezone": "^0.5.45",
-    "@babel/parser": "^7.26.0", 
-
+    "lowdb": "^3.0.0",
+    "megajs": "^1.1.3",
+    "mongoose": "^6.6.5",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.7.0",
     "node-gtts": "^2.0.2",
-    "node-webpmux": "^3.2.0",
-
-    "pino": "^8.21.0",
-    "qrcode": "^1.5.4",
+    "node-os-utils": "^1.3.6",
+    "node-webpmux": "^3.1.3",
+    "openai": "^3.3.0",
+    "perf_hooks": "^0.0.1",
+    "performance-now": "^2.1.0",
+    "pino": "^8.6.1",
+    "qrcode": "^1.5.1",
+    "sharp": "0.32.6",
     "qrcode-terminal": "^0.12.0",
-
     "readline-sync": "^1.4.10",
+    "ruhend-scraper": "^7.0.4",
+    "similarity": "^1.2.1",
     "syntax-error": "^1.4.0",
-
-    "ws": "^8.18.3",
-    "yargs": "^17.7.2",
-    "yt-search": "^2.12.1",
-    "undici": "^6.19.8"
+    "terminal-image": "^2.0.0",
+    "url-regex-safe": "^3.0.0",
+    "uuid": "^10.0.0",
+    "yargs": "^17.3.1",
+    "yt-search": "^2.10.3",
+    "ytdl-core": "^4.11.5",
+    "webp-converter": "*"
+  },
+  "optionalDependencies": {
+    "moment-timezone": "^0.5.37",
+    "wa-sticker-formatter": "^4.3.2"
   }
 }
