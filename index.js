@@ -402,7 +402,7 @@ async function startBot () {
 }
 
 ;(async () => {
-  console.log(chalk.hex('#ff1493')('\n♡ :: Iniciando Demitra bot...\n'))
+  console.log(chalk.hex('#ff1493')('\n♡ :: Iniciando Nanno bot...\n'))
   await database.read()
   log.success('Base de datos cargada.')
   await loadPlugins()
