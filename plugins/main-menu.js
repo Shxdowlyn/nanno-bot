@@ -102,7 +102,7 @@ const tempo = moment.tz('America/Argentina/Buenos_Aires').format('hh:mm A');
 
     const replacements = {
       $owner: owner || 'Oculto por privacidad',
-      $botType,
+      $botType: botType,
       $device: device,
       $tiempo: tiempo,
       $tempo: tempo,
