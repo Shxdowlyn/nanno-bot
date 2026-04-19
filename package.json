@@ -16,11 +16,11 @@
     "test": "node test.js",
     "test2": "nodemon index.js"
   },
-  "homepage": "https://github.com/jadeadaralove1/Demitrabot",
+  "homepage": "https://github.com/Shxdowlyn/nanno-bot",
   "author": "Adara",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jadeadaralove1/Demitrabot"
+    "url": "git+https://github.com/Shxdowlyn/nanno-bot"
   },
   "license": "MIT",
   "dependencies": {
