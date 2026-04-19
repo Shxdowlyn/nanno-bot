@@ -3,7 +3,7 @@ import { getDevice } from '@whiskeysockets/baileys';
 import fs from 'fs';
 import axios from 'axios';
 import moment from 'moment-timezone';
-import { bodyMenu, menuObject } from '../lib/commands.js';
+import { bodyMenu, menuObject } from '../../lib/commands.js';
 
 function normalize(text = '') {
   text = text.toLowerCase()
@@ -16,13 +16,11 @@ function normalize(text = '') {
 const handler = async (m, { conn, args, usedPrefix }) => {
   try {
 
-    // 🔒 DB SAFE INIT
     global.db = global.db || { data: { users: {}, groups: {}, settings: {} } };
-    global.db.data.settings = global.db.data.settings || {};
 
     const now = new Date();
     const colombianTime = new Date(
-      now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })
+      now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires ' })
     );
 
     const tiempo = colombianTime.toLocaleDateString('en-GB', {
@@ -35,18 +33,20 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';
 
-    // 🔥 BANNNER DESDE initDB + settings + fallback
+    // 🔥 BANNNER (INITDB + SETTINGS FALLBACK)
     const botSettings = global.db.data.settings?.[botId] || {};
 
     const banner =
       botSettings.banner ||
       global.db?.data?.settings?.banner ||
       global.banner ||
-      null;
+      '';
 
     const botname = botSettings.botname || '';
     const namebot = botSettings.namebot || '';
     const owner = botSettings.owner || '';
+    const canalId = botSettings.id || '';
+    const canalName = botSettings.nameid || '';
     const link = botSettings.link || '';
 
     const isOficialBot = global.client?.user?.id
@@ -57,7 +57,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     const users = Object.keys(global.db.data.users || {}).length;
 
-    const device = getDevice(m.key?.id || '');
+    const device = getDevice(m.key.id || '');
 
     const sender = global.db.data.users?.[m.sender]?.name || 'Usuario';
 
@@ -99,7 +99,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     const replacements = {
       $owner: owner || 'Oculto por privacidad',
-      $botType: botType,
+      $botType,
       $device: device,
       $tiempo: tiempo,
       $tempo: tempo,
@@ -117,7 +117,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
       menu = menu.replace(new RegExp(`\\${key}`, 'g'), value);
     }
 
-    // 🔥 BANNER FIX FINAL
+    // 🔥 BANNER FIX FINAL (EXACTO COMO QUIERES)
     const isVideo =
       typeof banner === 'string' &&
       /\.(mp4|webm)$/i.test(banner);
