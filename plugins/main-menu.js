@@ -19,18 +19,20 @@ const handler = async (m, { conn, args, usedPrefix }) => {
     global.db = global.db || { data: { users: {}, groups: {}, settings: {} } };
 
     const now = new Date();
-    const colombianTime = new Date(
-  now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })
+
+const colombianTime = new Date(
+  now.toLocaleString('en-US', {
+    timeZone: 'America/Argentina/Buenos_Aires'
+  })
 );
-    );
 
-    const tiempo = colombianTime.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    }).replace(/,/g, '');
+const tiempo = colombianTime.toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric'
+}).replace(/,/g, '');
 
-    const tempo = moment.tz('America/Argentina/Buenos_Aires').format('hh:mm A');
+const tempo = moment.tz('America/Argentina/Buenos_Aires').format('hh:mm A');
 
     const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';
 
