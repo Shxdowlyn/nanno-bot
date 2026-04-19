@@ -16,136 +16,136 @@ return text.endsWith('s') ? text.slice(0, -1) : text;
 const handler = async (m, { conn, args, usedPrefix }) => {
 try {
 
-global.db = global.db || { data: { users: {}, groups: {}, settings: {} } };  
+global.db = global.db || { data: { users: {}, groups: {}, settings: {} } };    
 
 const now = new Date();
 
 const colombianTime = new Date(
-  now.toLocaleString('en-US', {
-    timeZone: 'America/Argentina/Buenos_Aires'
-  })
+now.toLocaleString('en-US', {
+timeZone: 'America/Argentina/Buenos_Aires'
+})
 );
 
 const tiempo = colombianTime.toLocaleDateString('en-GB', {
-  day: '2-digit',
-  month: 'short',
-  year: 'numeric'
+day: '2-digit',
+month: 'short',
+year: 'numeric'
 }).replace(/,/g, '');
 
 const tempo = moment.tz('America/Argentina/Buenos_Aires').format('hh:mm A');
 
-const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';  
+const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';    
 
-// 🔥 BANNNER (INITDB + SETTINGS FALLBACK)  
-const botSettings = global.db.data.settings?.[botId] || {};  
+// 🔥 BANNNER (INITDB + SETTINGS FALLBACK)    
+const botSettings = global.db.data.settings?.[botId] || {};    
 
-const banner =  
-  botSettings.banner ||  
-  global.db?.data?.settings?.banner ||  
-  global.banner ||  
-  '';  
+const banner =    
+  botSettings.banner ||    
+  global.db?.data?.settings?.banner ||    
+  global.banner ||    
+  '';    
 
-const botname = botSettings.botname || '';  
-const namebot = botSettings.namebot || '';  
-const owner = botSettings.owner || '';  
-const canalId = botSettings.id || '';  
-const canalName = botSettings.nameid || '';  
-const link = botSettings.link || '';  
+const botname = botSettings.botname || '';    
+const namebot = botSettings.namebot || '';    
+const owner = botSettings.owner || '';    
+const canalId = botSettings.id || '';    
+const canalName = botSettings.nameid || '';    
+const link = botSettings.link || '';    
 
-const isOficialBot = global.client?.user?.id  
-  ? botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net'  
-  : false;  
+const isOficialBot = global.client?.user?.id    
+  ? botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net'    
+  : false;    
 
-const botType = isOficialBot ? 'Principal/Owner' : 'Sub Bot';  
+const botType = isOficialBot ? 'Principal/Owner' : 'Sub Bot';    
 
-const users = Object.keys(global.db.data.users || {}).length;  
+const users = Object.keys(global.db.data.users || {}).length;    
 
-const device = getDevice(m.key.id || '');  
+const device = getDevice(m.key.id || '');    
 
-const sender = global.db.data.users?.[m.sender]?.name || 'Usuario';  
+const sender = global.db.data.users?.[m.sender]?.name || 'Usuario';    
 
-const time = conn?.uptime  
-  ? formatearMs(Date.now() - conn.uptime)  
-  : "Desconocido";  
+const time = conn?.uptime    
+  ? formatearMs(Date.now() - conn.uptime)    
+  : "Desconocido";    
 
-const alias = {  
-  anime: ['reacciones'],  
-  downloads: ['downloads', 'descargas'],  
-  economia: ['economia', 'economy', 'eco'],  
-  grupo: ['grupo', 'group'],  
-  profile: ['profile', 'perfil'],  
-  sockets: ['sockets', 'bots'],  
-  utils: ['utils', 'utilidades', 'herramientas']  
-};  
+const alias = {    
+  anime: ['anime', 'reacciones'],    
+  downloads: ['downloads', 'descargas'],    
+  economia: ['economia', 'economy', 'eco'],    
+  grupo: ['grupo', 'group'],    
+  profile: ['profile', 'perfil'],    
+  sockets: ['sockets', 'bots'],    
+  utils: ['utils', 'utilidades', 'herramientas']    
+};    
 
-const input = normalize(args[0] || '');  
-const cat = Object.keys(alias).find(k =>  
-  alias[k].map(normalize).includes(input)  
-);  
+const input = normalize(args[0] || '');    
+const cat = Object.keys(alias).find(k =>    
+  alias[k].map(normalize).includes(input)    
+);    
 
-const category = `${cat ? ` para \`${cat}\`` : '. *(˶ᵔ ᵕ ᵔ˶)*'}`;  
+const category = `${cat ? ` para \`${cat}\`` : '. *(˶ᵔ ᵕ ᵔ˶)*'}`;    
 
-if (args[0] && !cat) {  
+if (args[0] && !cat) {    
   return m.reply(
 
 𐄹 ۪ ׁ 🥀ᩚ̼ 𖹭̫ ▎ La categoria *${args[0]}* no existe, las categorias disponibles son: *${Object.keys(alias).join(', ')}*.
 );
 }
 
-const sections = menuObject || {};  
-const content = cat  
-  ? String(sections[cat] || '')  
-  : Object.values(sections).map(s => String(s || '')).join('\n\n');  
+const sections = menuObject || {};    
+const content = cat    
+  ? String(sections[cat] || '')    
+  : Object.values(sections).map(s => String(s || '')).join('\n\n');    
 
-let menu = bodyMenu  
-  ? String(bodyMenu || '') + '\n\n' + content  
-  : content;  
+let menu = bodyMenu    
+  ? String(bodyMenu || '') + '\n\n' + content    
+  : content;    
 
-const replacements = {  
-  $owner: owner || 'Oculto por privacidad',  
-  $botType,  
-  $device: device,  
-  $tiempo: tiempo,  
-  $tempo: tempo,  
-  $users: users.toLocaleString(),  
-  $link: link,  
-  $cat: category,  
-  $sender: sender,  
-  $botname: botname,  
-  $namebot: namebot,  
-  $prefix: usedPrefix,  
-  $uptime: time  
-};  
+const replacements = {    
+  $owner: owner || 'Oculto por privacidad',    
+  $botType: botType,    
+  $device: device,    
+  $tiempo: tiempo,    
+  $tempo: tempo,    
+  $users: users.toLocaleString(),    
+  $link: link,    
+  $cat: category,    
+  $sender: sender,    
+  $botname: botname,    
+  $namebot: namebot,    
+  $prefix: usedPrefix,    
+  $uptime: time    
+};    
 
-for (const [key, value] of Object.entries(replacements)) {  
-  menu = menu.replace(new RegExp(`\\${key}`, 'g'), value);  
-}  
+for (const [key, value] of Object.entries(replacements)) {    
+  menu = menu.replace(new RegExp(`\\${key}`, 'g'), value);    
+}    
 
-// 🔥 BANNER FIX FINAL (EXACTO COMO QUIERES)  
-const isVideo =  
-  typeof banner === 'string' &&  
-  /\.(mp4|webm)$/i.test(banner);  
+// 🔥 BANNER FIX FINAL (EXACTO COMO QUIERES)    
+const isVideo =    
+  typeof banner === 'string' &&    
+  /\.(mp4|webm)$/i.test(banner);    
 
-if (isVideo) {  
-  await conn.sendMessage(m.chat, {  
-    video: { url: banner },  
-    gifPlayback: true,  
-    caption: menu,  
-    contextInfo: { mentionedJid: [m.sender] }  
-  }, { quoted: m });  
+if (isVideo) {    
+  await conn.sendMessage(m.chat, {    
+    video: { url: banner },    
+    gifPlayback: true,    
+    caption: menu,    
+    contextInfo: { mentionedJid: [m.sender] }    
+  }, { quoted: m });    
 
-} else if (banner) {  
-  await conn.sendMessage(m.chat, {  
-    image: { url: banner },  
-    caption: menu,  
-    contextInfo: { mentionedJid: [m.sender] }  
-  }, { quoted: m });  
+} else if (banner) {    
+  await conn.sendMessage(m.chat, {    
+    image: { url: banner },    
+    caption: menu,    
+    contextInfo: { mentionedJid: [m.sender] }    
+  }, { quoted: m });    
 
-} else {  
-  await conn.sendMessage(m.chat, {  
-    text: menu,  
-    contextInfo: { mentionedJid: [m.sender] }  
-  }, { quoted: m });  
+} else {    
+  await conn.sendMessage(m.chat, {    
+    text: menu,    
+    contextInfo: { mentionedJid: [m.sender] }    
+  }, { quoted: m });    
 }
 
 } catch (e) {
@@ -173,5 +173,3 @@ ${minutos % 60}m,
 ${segundos % 60}s
 ].filter(Boolean).join(" ");
 }
-
-Error en el menú: Invalid time zone specified: America/Argentina/Buenos_Aires
