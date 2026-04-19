@@ -344,7 +344,7 @@ export const handler = async (m, conn, plugins) => {
         }
 
         // ════════════════════════════════════════════════════════════════════
-        // VALIDACIONES — Estilo Nino Nakano 🦋
+        // VALIDACIONES
         // ════════════════════════════════════════════════════════════════════
 
         // Modo admin del grupo
