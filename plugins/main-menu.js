@@ -29,7 +29,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
       year: 'numeric'
     }).replace(/,/g, '');
 
-    const tempo = moment.tz('America/Caracas').format('hh:mm A');
+    const tempo = moment.tz('America/Argentina/Buenos_Aires').format('hh:mm A');
 
     const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';
 
