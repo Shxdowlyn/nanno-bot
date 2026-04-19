@@ -358,29 +358,29 @@ Te sugiero amablemente usar #menu… a menos que disfrutes equivocarte, claro.
                 plugins
             })
 
-      } catch (cmdError) {
+        } catch (cmdError) {
 
-    console.log(chalk.red('[ERROR COMANDO]'), cmdError)
+            console.log(chalk.red('[ERROR COMANDO]'), cmdError)
 
-    const errorMsg = cmdError?.message || String(cmdError)
+            const errorMsg = cmdError?.message || String(cmdError)
 
-    let errorType = 'Desconocido'
+            let errorType = 'Desconocido'
 
-    if (cmdError?.response) {
-        errorType = 'API / HTTP'
-    } else if (/html|doctype/i.test(errorMsg)) {
-        errorType = 'Respuesta HTML inesperada'
-    } else if (/unexpected token|json/i.test(errorMsg)) {
-        errorType = 'Error JSON'
-    } else if (/cannot find module|err_module_not_found/i.test(errorMsg)) {
-        errorType = 'Módulo faltante'
-    } else if (/econnrefused|enotfound/i.test(errorMsg)) {
-        errorType = 'Conexión fallida'
-    } else if (/timeout/i.test(errorMsg)) {
-        errorType = 'Timeout'
-    }
+            if (cmdError?.response) {
+                errorType = 'API / HTTP'
+            } else if (/html|doctype/i.test(errorMsg)) {
+                errorType = 'Respuesta HTML inesperada'
+            } else if (/unexpected token|json/i.test(errorMsg)) {
+                errorType = 'Error JSON'
+            } else if (/cannot find module|err_module_not_found/i.test(errorMsg)) {
+                errorType = 'Módulo faltante'
+            } else if (/econnrefused|enotfound/i.test(errorMsg)) {
+                errorType = 'Conexión fallida'
+            } else if (/timeout/i.test(errorMsg)) {
+                errorType = 'Timeout'
+            }
 
-    const debug = `
+            const debug = `
 ❌ *ERROR AL EJECUTAR COMANDO*
 
 📍 Tipo: ${errorType}
@@ -392,7 +392,17 @@ ${errorMsg.slice(0, 500)}
 ${m.text || 'desconocido'}
 `.trim()
 
-    console.log(chalk.red(debug))
+            console.log(chalk.red(debug))
 
-    if (m?.reply) await m.reply(debug)
+            if (m?.reply) await m.reply(debug)
+        }
+
+    } catch (e) {
+
+        console.log(chalk.red('[ERROR HANDLER GLOBAL]'), e)
+
+        if (m?.reply) {
+            await m.reply(`❌ *ERROR GLOBAL*\n\n🧾 ${(e?.message || e).slice(0, 400)}`)
+        }
+    }
 }
