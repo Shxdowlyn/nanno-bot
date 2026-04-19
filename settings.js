@@ -18,19 +18,19 @@ global.botNumber = '';
 global.libreria = 'Baileys';
 global.baileys = 'V 6.7.17';
 global.vs = '1.0.0';
-global.nameqr = 'DEMITRA BOT 🦭';
+global.nameqr = 'NANNO';
 global.namebot = 'DE MI TRA';
 global.sessions = './Sessions/Owner';
 global.jadi = 'JadiBots';
 
-global.packname = 'Demitra';
-global.botname = 'Demitra';
+global.packname = 'Nanno';
+global.botname = 'Nanno';
 global.botName = 'Demitra';
-global.wm = 'Demitrabot';
-global.author = '© DemiDevTeam';
-global.dev = '© DemitraTeam';
+global.wm = 'Nanno';
+global.author = '©NannoDevTeam';
+global.dev = '©NannoTeam';
 global.textbot = 'ִㅤ୨ 🪼 ୧ㅤ Donde el silencio responde más que mil comandos.  ૮₍´｡･⩊･ ｡₎ა';
-global.etiqueta = 'Demitra';
+global.etiqueta = 'Nanno';
 
 global.moneda = 'Stamps';
 global.currencySymbol = 'Stamps';
