@@ -1,8 +1,8 @@
 import './settings.js';
 import chalk from 'chalk';
 import print from './lib/print.js';
-import { smsg } from './lib/simple.js';
-import { database } from './lib/database.js';
+import { smsg } from './lib/smsg.js';
+import { database } from './lib/system/database.js';
 import { readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
