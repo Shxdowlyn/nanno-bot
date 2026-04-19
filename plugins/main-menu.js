@@ -22,30 +22,31 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     const now = new Date();
     const colombianTime = new Date(
-      now.toLocaleString('en-US', { timeZone: 'America/Caracas' })
+      now.toLocaleString('en-US', { timeZone: 'Argentina/Buenos Aires' })
     );
 
-    const tiempo = colombianTime
-      .toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      })
-      .replace(/,/g, '');
+    const tiempo = colombianTime.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    }).replace(/,/g, '');
 
     const tempo = moment.tz('America/Caracas').format('hh:mm A');
 
     const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';
 
-    // 🔒 SETTINGS SAFE
+    // 🔥 BANNNER DESDE initDB + settings + fallback
     const botSettings = global.db.data.settings?.[botId] || {};
+
+    const banner =
+      botSettings.banner ||
+      global.db?.data?.settings?.banner ||
+      global.banner ||
+      null;
 
     const botname = botSettings.botname || '';
     const namebot = botSettings.namebot || '';
-    const banner = botSettings.banner || null; // 👈 importante
     const owner = botSettings.owner || '';
-    const canalId = botSettings.id || '';
-    const canalName = botSettings.nameid || '';
     const link = botSettings.link || '';
 
     const isOficialBot = global.client?.user?.id
@@ -56,7 +57,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     const users = Object.keys(global.db.data.users || {}).length;
 
-    const device = getDevice(m.key.id);
+    const device = getDevice(m.key?.id || '');
 
     const sender = global.db.data.users?.[m.sender]?.name || 'Usuario';
 
@@ -83,10 +84,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
 
     if (args[0] && !cat) {
       return m.reply(
-`𐄹 ۪ ׁ 🥀ᩚ̼ 𖹭̫ ▎ La categoria *${args[0]}* no existe, las categorias disponibles son: *${Object.keys(alias).join(', ')}*.
-> Para ver la lista completa escribe *${usedPrefix}menu*
-> Para ver los comandos de una categoría escribe *${usedPrefix}menu [categoría]*
-> Ejemplo: *${usedPrefix}menu anime*`
+`𐄹 ۪ ׁ 🥀ᩚ̼ 𖹭̫ ▎ La categoria *${args[0]}* no existe, las categorias disponibles son: *${Object.keys(alias).join(', ')}*.`
       );
     }
 
@@ -100,40 +98,51 @@ const handler = async (m, { conn, args, usedPrefix }) => {
       : content;
 
     const replacements = {
-  $owner: owner || 'Oculto por privacidad',
-  $botType: botType,
-  $device: device,
-  $tiempo: tiempo,
-  $tempo: tempo,
-  $users: users.toLocaleString(),
-  $link: link,
-  $cat: category,
-  $sender: sender,
-  $botname: botname,
-  $namebot: namebot,
-  $prefix: usedPrefix,
-  $uptime: time
-};
+      $owner: owner || 'Oculto por privacidad',
+      $botType: botType,
+      $device: device,
+      $tiempo: tiempo,
+      $tempo: tempo,
+      $users: users.toLocaleString(),
+      $link: link,
+      $cat: category,
+      $sender: sender,
+      $botname: botname,
+      $namebot: namebot,
+      $prefix: usedPrefix,
+      $uptime: time
+    };
 
     for (const [key, value] of Object.entries(replacements)) {
       menu = menu.replace(new RegExp(`\\${key}`, 'g'), value);
     }
 
-    // 🔥 AQUÍ ARREGLO DEL “BANNER NO CARGA”
-    const hasVideoBanner =
+    // 🔥 BANNER FIX FINAL
+    const isVideo =
       typeof banner === 'string' &&
-      (banner.endsWith('.mp4') || banner.endsWith('.webm'));
+      /\.(mp4|webm)$/i.test(banner);
 
-    await conn.sendMessage(m.chat, hasVideoBanner ? {
-      video: { url: banner },
-      gifPlayback: true,
-      caption: menu,
-      contextInfo: { mentionedJid: [m.sender] }
-    } : {
-      image: banner ? { url: banner } : undefined,
-      text: menu,
-      contextInfo: { mentionedJid: [m.sender] }
-    }, { quoted: m });
+    if (isVideo) {
+      await conn.sendMessage(m.chat, {
+        video: { url: banner },
+        gifPlayback: true,
+        caption: menu,
+        contextInfo: { mentionedJid: [m.sender] }
+      }, { quoted: m });
+
+    } else if (banner) {
+      await conn.sendMessage(m.chat, {
+        image: { url: banner },
+        caption: menu,
+        contextInfo: { mentionedJid: [m.sender] }
+      }, { quoted: m });
+
+    } else {
+      await conn.sendMessage(m.chat, {
+        text: menu,
+        contextInfo: { mentionedJid: [m.sender] }
+      }, { quoted: m });
+    }
 
   } catch (e) {
     console.error(e);
