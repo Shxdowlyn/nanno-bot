@@ -22,6 +22,8 @@
 
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.9",
+    "lowdb": "^3.9.0",
+    "nanoid": "^3.3.7", 
 
     "axios": "^1.6.0",
     "chalk": "^4.1.2", 
