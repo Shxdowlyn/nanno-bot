@@ -88,7 +88,7 @@ async function startBot() {
 
   if (!methodCodeQR && !methodCode && !state.creds.registered && !opcion) {
     console.clear()
-    console.log(ninoBanner)
+    console.log(nannoBanner)
     console.log(chalk.bold.cyan('SELECCIONA TU MÉTODO DE VINCULACIÓN:\n'))
     console.log(chalk.magenta('   [1]') + chalk.white(' Código QR'))
     console.log(chalk.magenta('   [2]') + chalk.white(' Código de 8 dígitos'))
