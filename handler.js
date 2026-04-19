@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import moment from 'moment'
 import fs from 'fs'
-import { load as loadPlugins } from './lib/system/commandsLoader.js'
+import seeCommands from './lib/system/commandsloader.js'
 import initDB from './lib/system/initDB.js'
 import level from './commands/level.js'
 import antilink from './commands/antilink.js'
