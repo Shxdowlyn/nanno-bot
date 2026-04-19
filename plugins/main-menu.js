@@ -13,34 +13,41 @@ function normalize(text = '') {
   return text.endsWith('s') ? text.slice(0, -1) : text;
 }
 
-const handler = async (m, { conn, args, usedPrefix, command }) => {
+const handler = async (m, { conn, args, usedPrefix }) => {
   try {
 
-    // 🔒 SEGURIDAD DB
-    global.db = global.db || { data: { users: {}, groups: {}, settings: {} } }
+    // 🔒 DB SAFE INIT
+    global.db = global.db || { data: { users: {}, groups: {}, settings: {} } };
+    global.db.data.settings = global.db.data.settings || {};
 
     const now = new Date();
-    const colombianTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }));
-    const tiempo = colombianTime.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    }).replace(/,/g, '');
+    const colombianTime = new Date(
+      now.toLocaleString('en-US', { timeZone: 'America/Caracas' })
+    );
+
+    const tiempo = colombianTime
+      .toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+      .replace(/,/g, '');
 
     const tempo = moment.tz('America/Caracas').format('hh:mm A');
 
     const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';
+
+    // 🔒 SETTINGS SAFE
     const botSettings = global.db.data.settings?.[botId] || {};
 
     const botname = botSettings.botname || '';
     const namebot = botSettings.namebot || '';
-    const banner = botSettings.banner || '';
+    const banner = botSettings.banner || null; // 👈 importante
     const owner = botSettings.owner || '';
     const canalId = botSettings.id || '';
     const canalName = botSettings.nameid || '';
     const link = botSettings.link || '';
 
-    // 🔒 FIX global.client crash
     const isOficialBot = global.client?.user?.id
       ? botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net'
       : false;
@@ -53,7 +60,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
     const sender = global.db.data.users?.[m.sender]?.name || 'Usuario';
 
-    const time = conn.uptime
+    const time = conn?.uptime
       ? formatearMs(Date.now() - conn.uptime)
       : "Desconocido";
 
@@ -94,7 +101,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
     const replacements = {
       $owner: owner || 'Oculto por privacidad',
-      $botType: botType,
+      $botType,
       $device: device,
       $tiempo: tiempo,
       $tempo: tempo,
@@ -112,11 +119,20 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
       menu = menu.replace(new RegExp(`\\${key}`, 'g'), value);
     }
 
-    await conn.sendMessage(m.chat, {
+    // 🔥 AQUÍ ARREGLO DEL “BANNER NO CARGA”
+    const hasVideoBanner =
+      typeof banner === 'string' &&
+      (banner.endsWith('.mp4') || banner.endsWith('.webm'));
+
+    await conn.sendMessage(m.chat, hasVideoBanner ? {
+      video: { url: banner },
+      gifPlayback: true,
+      caption: menu,
+      contextInfo: { mentionedJid: [m.sender] }
+    } : {
+      image: banner ? { url: banner } : undefined,
       text: menu,
-      contextInfo: {
-        mentionedJid: [m.sender]
-      }
+      contextInfo: { mentionedJid: [m.sender] }
     }, { quoted: m });
 
   } catch (e) {
