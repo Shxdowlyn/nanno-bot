@@ -1,24 +1,20 @@
 import fs from 'fs'
 import fetch from 'node-fetch'
 import { database } from '../lib/database.js'
-import { bodyMenu, menuObject } from '../lib/commands.js'
 
 const handler = async (m, { conn }) => {
     try {
 
         const botname = global.botname || global.botName || 'Zero Two'
 
-        // 🔥 CANAL FIX (INIT + FALLBACK)
-        global.db = global.db || { data: { settings: {} } }
+        // 🔥 SETTINGS SAFE + CANAL ID (NO SE USA EN MENSAJE)
+        global.db = global.db || { data: { settings: {}, users: {} } }
         global.db.data.settings = global.db.data.settings || {}
 
         const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net'
 
         global.db.data.settings[botId] ??= {}
-
         global.db.data.settings[botId].id ??= '120363406529946290@newsletter'
-
-        const canalId = global.db.data.settings[botId].id
 
         const pluginFiles = fs.readdirSync('./plugins').filter(file => file.endsWith('.js'))
 
@@ -34,7 +30,6 @@ const handler = async (m, { conn }) => {
                     if (!grouped[tag]) grouped[tag] = []
                     grouped[tag].push(cmd)
                 }
-
             } catch {
                 const cmd = file.replace('.js', '')
                 if (!grouped['misc']) grouped['misc'] = []
@@ -48,7 +43,6 @@ const handler = async (m, { conn }) => {
 
         const zonaHoraria = 'America/Bogota'
         const ahora = new Date()
-
         const hora = parseInt(
             ahora.toLocaleTimeString('es-CO', {
                 timeZone: zonaHoraria,
@@ -76,17 +70,25 @@ const handler = async (m, { conn }) => {
 ${cmds.map(c => `  ꕦ ${c}`).join('\n')}`
             ).join('\n\n')
 
-        // 🔥 MENÚ BASE (SIN PDF)
-        let menuTexto = (bodyMenu || '') + '\n\n' + (seccionesTexto || '')
+        // 🌐 ESTILO “WHATSAPP WEB LOADING”
+        let menuTexto = `
+📡 *Conectando a WhatsApp Web...*
+────────────────────
+❖ *${botname} MENU*
+❝ Hola *${m.pushName}*, ${saludo} ${carita}
+Sistema cargado correctamente 💗 ❞
 
-        menuTexto = menuTexto
-            .replace(/\$botname/g, botname)
-            .replace(/\$cmds/g, totalCmds)
-            .replace(/\$users/g, totalUsers)
-            .replace(/\$registered/g, registeredUsers)
-            .replace(/\$name/g, m.pushName)
-            .replace(/\$saludo/g, saludo)
-            .replace(/\$carita/g, carita)
+ꙮ *Comandos:* ${totalCmds}
+ꙮ *Usuarios:* ${totalUsers}
+ꙮ *Registrados:* ${registeredUsers}
+
+────────────────────
+
+${seccionesTexto}
+
+────────────────────
+🌐 whatsapp.com
+`.trim()
 
         const response = await fetch('https://causas-files.vercel.app/fl/9vs2.jpg')
         const buffer = await response.buffer()
@@ -95,21 +97,20 @@ ${cmds.map(c => `  ꕦ ${c}`).join('\n')}`
             image: buffer,
             caption: menuTexto,
             contextInfo: {
-                isForwarded: true,
                 externalAdReply: {
                     title: botname,
-                    body: 'menu system 💗',
+                    body: 'whatsapp web • loading menu',
                     mediaType: 1,
                     renderLargerThumbnail: true,
                     thumbnail: buffer,
-                    sourceUrl: 'https://whatsapp.com/channel/' + canalId
+                    sourceUrl: 'https://web.whatsapp.com'
                 }
             }
         }, { quoted: m })
 
     } catch (e) {
         console.error(e)
-        m.reply('💔 Error al generar el menú...')
+        m.reply('💔 Error al cargar el menú...')
     }
 }
 
