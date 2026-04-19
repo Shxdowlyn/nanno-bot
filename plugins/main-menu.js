@@ -48,7 +48,7 @@ global.db.data.settings[botId] ||= {}
 // 📡 canal default
 global.db.data.settings[botId].id ??= '120363406529946290@newsletter'
 
-const botSettings = global.db.data.settings[botId]'
+const botSettings = global.db.data.settings[botId]
 
     const banner =
       botSettings.banner ||
