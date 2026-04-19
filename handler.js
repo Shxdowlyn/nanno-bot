@@ -1,6 +1,6 @@
 import './settings.js';
 import { smsg } from './lib/smsg.js';
-import { database } from './lib/database.js';
+import { database } from './lib/system/database.js'
 import { readdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
