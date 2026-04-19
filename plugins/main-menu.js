@@ -15,6 +15,10 @@ function normalize(text = '') {
 
 const handler = async (m, { conn, args, usedPrefix, command }) => {
   try {
+
+    // 🔒 SEGURIDAD DB
+    global.db = global.db || { data: { users: {}, groups: {}, settings: {} } }
+
     const now = new Date();
     const colombianTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }));
     const tiempo = colombianTime.toLocaleDateString('en-GB', {
@@ -25,8 +29,8 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
     const tempo = moment.tz('America/Caracas').format('hh:mm A');
 
-    const botId = conn?.user?.id.split(':')[0] + '@s.whatsapp.net';
-    const botSettings = global.db.data.settings[botId] || {};
+    const botId = conn?.user?.id?.split(':')[0] + '@s.whatsapp.net';
+    const botSettings = global.db.data.settings?.[botId] || {};
 
     const botname = botSettings.botname || '';
     const namebot = botSettings.namebot || '';
@@ -36,7 +40,11 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
     const canalName = botSettings.nameid || '';
     const link = botSettings.link || '';
 
-    const isOficialBot = botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net';
+    // 🔒 FIX global.client crash
+    const isOficialBot = global.client?.user?.id
+      ? botId === global.client.user.id.split(':')[0] + '@s.whatsapp.net'
+      : false;
+
     const botType = isOficialBot ? 'Principal/Owner' : 'Sub Bot';
 
     const users = Object.keys(global.db.data.users || {}).length;
@@ -75,7 +83,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
       );
     }
 
-    const sections = menuObject;
+    const sections = menuObject || {};
     const content = cat
       ? String(sections[cat] || '')
       : Object.values(sections).map(s => String(s || '')).join('\n\n');
@@ -86,7 +94,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
     const replacements = {
       $owner: owner || 'Oculto por privacidad',
-      $botType,
+      $botType: botType,
       $device: device,
       $tiempo: tiempo,
       $tempo: tempo,
