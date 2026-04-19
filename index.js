@@ -17,7 +17,15 @@ import {
 } from '@whiskeysockets/baileys'
 
 import { smsg } from './lib/message.js'
-import './handler.js'
+import { handler as main } from './handler.js'   // ✅ FIX IMPORT
+
+/* ───────────── BANNER ───────────── */
+console.log(chalk.cyan(`
+╔════════════════════════════╗
+║        NANNO BOT 🤖        ║
+║   Iniciando sistema...     ║
+╚════════════════════════════╝
+`))
 
 /* ───────────── LOG ───────────── */
 const log = {
@@ -49,21 +57,18 @@ let phoneNumber = ''
 if (process.argv.includes('--qr')) opcion = '1'
 else if (process.argv.includes('--code')) opcion = '2'
 else if (!fs.existsSync('./Sessions/Owner/creds.json')) {
-  opcion = readlineSync.question(
-    '\n1. QR\n2. Código (8 dígitos)\n--> '
-  )
+  opcion = readlineSync.question('\n1. QR\n2. Código\n--> ')
 
   while (!['1', '2'].includes(opcion)) {
     opcion = readlineSync.question('--> ')
   }
 
   if (opcion === '2') {
-    const input = readlineSync.question('Número WhatsApp: ')
-    phoneNumber = normalizePhone(input)
+    phoneNumber = normalizePhone(readlineSync.question('Número WhatsApp: '))
   }
 }
 
-/* ───────────── BOT PRINCIPAL ───────────── */
+/* ───────────── BOT ───────────── */
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState('./Sessions/Owner')
   const { version } = await fetchLatestBaileysVersion()
@@ -91,7 +96,7 @@ async function startBot() {
 
   sock.ev.on('creds.update', saveCreds)
 
-  /* ───────── QR ───────── */
+  /* QR */
   if (opcion === '1') {
     sock.ev.on('connection.update', ({ qr }) => {
       if (qr) {
@@ -101,13 +106,13 @@ async function startBot() {
     })
   }
 
-  /* ───────── PAIRING CODE ───────── */
+  /* PAIRING CODE */
   if (opcion === '2') {
     setTimeout(async () => {
       try {
         if (!state.creds.registered) {
           const code = await sock.requestPairingCode(phoneNumber)
-          console.log(chalk.green('\nCódigo de emparejamiento:'), code)
+          console.log(chalk.green('\nCódigo:'), code)
         }
       } catch (e) {
         log.error(e.message)
@@ -115,7 +120,7 @@ async function startBot() {
     }, 3000)
   }
 
-  /* ───────── CONEXIÓN ───────── */
+  /* CONEXIÓN */
   sock.ev.on('connection.update', (update) => {
     const { connection, lastDisconnect } = update
 
@@ -137,20 +142,23 @@ async function startBot() {
     }
   })
 
-  /* ───────── MENSAJES ───────── */
+  /* MENSAJES */
   sock.ev.on('messages.upsert', async ({ messages }) => {
     try {
       const m = messages[0]
       if (!m.message) return
 
       const msg = await smsg(sock, m)
-      await main(sock, msg)
+
+      // 👇 FIX IMPORTANTE: plugins vacío si no tienes loader aún
+      await main(msg, sock, global.plugins || new Map())
+
     } catch (e) {
       console.log(e)
     }
   })
 }
 
-/* ───────── START ───────── */
+/* START */
 console.log(chalk.magenta('\nIniciando bot...\n'))
 startBot()
