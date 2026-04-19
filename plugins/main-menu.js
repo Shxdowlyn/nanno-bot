@@ -3,7 +3,7 @@ import { getDevice } from '@whiskeysockets/baileys';
 import fs from 'fs';
 import axios from 'axios';
 import moment from 'moment-timezone';
-import { bodyMenu, menuObject } from '../../lib/commands.js';
+import { bodyMenu, menuObject } from '../lib/commands.js';
 
 function normalize(text = '') {
   text = text.toLowerCase()
