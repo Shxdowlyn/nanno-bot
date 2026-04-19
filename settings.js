@@ -94,8 +94,8 @@ global.getNewsletterCtx = (thumbnail = null, title = null, body = null) => {
             newsletterName: global.newsletterName
         },
         externalAdReply: {
-            title:               title || `🌸 ${global.botName}`,
-            body:                body  || 'Nino Nakano Bot 🦋',
+            title:               title || `${global.botName}`,
+            body:                body  || 'Nanno bot',
             mediaType:           1,
             mediaUrl:            global.rcanal,
             sourceUrl:           global.rcanal,
@@ -108,7 +108,7 @@ global.getNewsletterCtx = (thumbnail = null, title = null, body = null) => {
 }
 
 // ————————————————————————————————————————————————————————————————————
-// MENSAJES DE SISTEMA (Estilo Tsundere 🦋)
+// MENSAJES DE SISTEMA
 // ————————————————————————————————————————————————————————————————————
 
 global.mess = {
@@ -132,7 +132,7 @@ const file = fileURLToPath(import.meta.url)
 fs.watchFile(file, async () => {
     try {
         fs.unwatchFile(file)
-        console.log(chalk.magentaBright('\n🦋 [SETTINGS]: Cambios guardados. Solo Aarom y Félix tienen el control ahora.'))
+        console.log(chalk.magentaBright('\n [SETTINGS]: Cambios guardados. Solo Aarom y Félix tienen el control ahora.'))
         await import(`${file}?update=${Date.now()}`)
     } catch (e) {
         console.error(chalk.red('[!] Error en auto-reload:'), e)
